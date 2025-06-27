@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسجيل بيانات الأنشطة | بوابة كنز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    html, body { height: 100%; margin: 0; padding: 0;}
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #1c0171 0%, #a6c1ee 100%);
+    }
+    header {
+      width: 95%;
+      max-width: 1200px;
+      margin: 20px auto 0;
+      padding: 15px 30px;
+      background: rgba(104, 26, 26, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    header h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0;
+      background: linear-gradient(90deg, #ff9800, #ffeb3b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      width: 100%;
+    }
+    main {
+      width: 100%;
+      max-width: 470px;
+      margin: 45px auto 0;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(255,193,7,0.13);
+      padding: 27px 22px 19px 22px;
+      text-align: center;
+      animation: fadeIn 0.7s;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h2 {
+      color: #ff9800;
+      margin-bottom: 22px;
+      font-size: 1.35rem;
+      letter-spacing: 1px;
+    }
+    form input, form select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 13px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      box-sizing: border-box;
+      font-family: inherit;
+      outline: none;
+      transition: border 0.3s;
+    }
+    form input:focus, form select:focus {
+      border-color: #ff9800;
+      box-shadow: 0 0 6px #ffeb3ba2;
+    }
+    .activity-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      margin-bottom: 13px;
+      gap: 8px;
+    }
+    .activity-row label {
+      white-space: nowrap;
+      font-size: 1.07em;
+      color: #333;
+      font-weight: 600;
+      margin-left: 7px;
+    }
+    .activity-icon {
+      font-size: 1.2em;
+      margin-left: 4px;
+      color: #ff9800;
+    }
+    .activity-select {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+    .hint {
+      color: #0e0d0d;
+      font-size: 14px;
+      margin-bottom: 7px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #ff9800 30%, #ffeb3b 80%);
+      color: #fff;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #ffeb3b 10%, #ff9800 100%);
+      color: #1c0171;
+    }
+    .error {
+      color: #d32f2f;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+    .success {
+      color: #388e3c;
+      margin-bottom: 10px;
+      font-size: 0.97rem;
+    }
+    .user-id-box {
+      background: #fffbe6;
+      color: #e65100;
+      border: 1.5px solid #ffb300;
+      border-radius: 10px;
+      margin: 16px 0 10px 0;
+      padding: 13px 10px 10px 10px;
+      font-size: 1.1em;
+      font-weight: bold;
+      box-shadow: 0 2px 16px #fff3e080;
+      letter-spacing: 1px;
+      line-height: 1.8;
+      word-break: break-all;
+      animation: fadeInBox 1s;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .save-warning {
+      margin: 12px auto 10px auto;
+      padding: 10px 14px;
+      background: linear-gradient(90deg, #ff9800 70%, #ffeb3b 100%);
+      color: #fff;
+      border-radius: 7px;
+      font-size: 1.15em;
+      font-weight: bold;
+      box-shadow: 0 2px 12px #ffe08260;
+      letter-spacing: 1px;
+      border: 2px solid #ffe082;
+      display: inline-block;
+      animation: fadeInBox 0.6s;
+    }
+    .pdf-btn {
+      margin: 12px auto 0 auto;
+      display: inline-block;
+      background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 11px 30px;
+      font-size: 1.09em;
+      font-family: 'Cairo', sans-serif;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0px 2px 10px rgba(24, 90, 157, 0.17);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      letter-spacing: 0.6px;
+    }
+    .pdf-btn:hover {
+      background: linear-gradient(90deg, #185a9d 10%, #43cea2 100%);
+      color: #fffde7;
+      box-shadow: 0px 4px 16px rgba(24, 90, 157, 0.28);
+      transform: scale(1.03);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    @keyframes fadeInBox {
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    footer {
+      width: 100%;
+      padding: 15px 8px;
+      background: rgba(255,255,255,0.95);
+      text-align: center;
+      font-size: 13px;
+      color: #1e1d1d;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      margin-top: 0;
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.1rem;}
+      main { padding: 13px 4px; max-width: 98vw;}
+      h2 { font-size: 1.03rem;}
+      form input, form select, button { font-size: 0.97rem;}
+      .activity-row label { font-size: 0.96em;}
+      .user-id-box { font-size: 0.98em; }
+    }
+    @media (max-width: 350px) {
+      header h1 { font-size: 0.9rem;}
+      main { padding: 6px 1vw;}
+      form input, form select, button { font-size: 0.83rem;}
+      .user-id-box { font-size: 0.85em; }
+    }
+  </style>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>بوابة كنز للأنشطة الترفيهية</h1>
+  </header>
+  <main>
+    <h2>تسجيل بيانات الأنشطة</h2>
+    <div id="userIdBox" class="user-id-box"></div>
+    <div id="saveWarning" class="save-warning" style="display:none;">احفظ رقمك كويس لانك هتستخدمه في كل انشطتك</div>
+    <button id="pdfBtn" class="pdf-btn" style="display:none;">حفظ بياناتي PDF</button>
+    <form id="kenzDataForm" autocomplete="off">
+      <input type="text" id="name" placeholder="👤 الاسم بالكامل" required>
+      <input type="tel" id="phone" placeholder="📞 رقم التليفون" required pattern="^[0-9+\- ]{8,}$" title="أدخل رقم هاتف صحيح">
+      <input type="text" id="unit" placeholder="🏠 رقم الوحدة" required>
+      <div class="activity-row">
+        <label for="activity" class="activity-icon" title="اختر نوع النشاط">🎯</label>
+        <select id="activity" class="activity-select" multiple required>
+          <option value="كرة قدم">⚽ كرة قدم</option>
+          <option value="تنس ارضي">🎾 تنس أرضي</option>
+          <option value="تنس طاولة">🏓 تنس طاولة</option>
+          <option value="كرة طائرة">🏐 كرة طائرة</option>
+          <option value="كرة سلة">🏀 كرة سلة</option>
+          <option value="قيادة دراجات">🚴‍♂️ قيادة دراجات</option>
+          <option value="شطرنج">♟️ شطرنج</option>
+          <option value="بازارات/جراج سيل">🛍️ اشتراك في بازارات/جراج سيل</option>
+        </select>
+        <label for="activity" style="margin:0 3px 0 0;">نوع النشاط</label>
+      </div>
+      <div class="hint">يمكنك اختيار أكثر من نشاط بالضغط مع زر Ctrl أو لمس متعدد على الجوال</div>
+      <input type="date" id="birthdate" max="2100-12-31">
+      <div class="hint" id="birthdateHint">تاريخ الميلاد (اختياري)</div>
+      <div id="formError" class="error"></div>
+      <div id="formSuccess" class="success"></div>
+      <button type="submit">إرسال البيانات</button>
+    </form>
+  </main>
+  <footer>
+    جميع الحقوق محفوظة © بوابة كنز للأنشطة الترفيهية 2025
+  </footer>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, function(user) {
+      if (!user) {
+        window.location.href = 'kenz-login.html?next=' + encodeURIComponent(window.location.pathname.split('/').pop());
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('kenzDataForm');
+      const errorDiv = document.getElementById('formError');
+      const successDiv = document.getElementById('formSuccess');
+      const activitySelect = document.getElementById('activity');
+      const birthdateInput = document.getElementById('birthdate');
+      const birthdateHint = document.getElementById('birthdateHint');
+      const userIdBox = document.getElementById('userIdBox');
+      const saveWarning = document.getElementById('saveWarning');
+      const pdfBtn = document.getElementById('pdfBtn');
+      let lastUserData = null;
+
+      function updateBirthdateRequirement() {
+        const selected = Array.from(activitySelect.selectedOptions).map(opt => opt.value);
+        const needsBirthdate = selected.some(
+          v => v !== 'قيادة دراجات' && v !== 'شطرنج'
+        );
+        if (selected.length === 0) {
+          birthdateInput.required = false;
+          birthdateHint.textContent = "تاريخ الميلاد (اختياري)";
+        } else if (needsBirthdate) {
+          birthdateInput.required = true;
+          birthdateHint.textContent = "تاريخ الميلاد (إجباري مع هذا النشاط)";
+        } else {
+          birthdateInput.required = false;
+          birthdateHint.textContent = "تاريخ الميلاد (اختياري)";
+        }
+      }
+      activitySelect.addEventListener('change', updateBirthdateRequirement);
+
+      function generateUserId() {
+        const now = Date.now();
+        const rand = Math.floor(100 + Math.random()*900); // 3 أرقام عشوائية
+        return `${now}${rand}`;
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errorDiv.textContent = '';
+        successDiv.textContent = '';
+        userIdBox.style.display = 'none';
+        userIdBox.textContent = '';
+        saveWarning.style.display = 'none';
+        pdfBtn.style.display = 'none';
+        lastUserData = null;
+
+        const name = document.getElementById('name').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const unit = document.getElementById('unit').value.trim();
+        const birthdate = document.getElementById('birthdate').value;
+        const selectedActivities = Array.from(activitySelect.selectedOptions).map(opt => opt.value);
+
+        if (!name) {
+          errorDiv.textContent = "يرجى إدخال الاسم بالكامل.";
+          return;
+        }
+        if (!phone) {
+          errorDiv.textContent = "يرجى إدخال رقم التليفون.";
+          return;
+        }
+        if (!unit) {
+          errorDiv.textContent = "يرجى إدخال رقم الوحدة.";
+          return;
+        }
+        if (selectedActivities.length === 0) {
+          errorDiv.textContent = "يرجى اختيار نوع النشاط.";
+          return;
+        }
+        const needsBirthdate = selectedActivities.some(
+          v => v !== 'قيادة دراجات' && v !== 'شطرنج'
+        );
+        if (needsBirthdate && !birthdate) {
+          errorDiv.textContent = "تاريخ الميلاد إجباري مع اختيار هذا النشاط.";
+          birthdateInput.focus();
+          return;
+        }
+
+        const userId = generateUserId();
+
+        try {
+          await addDoc(collection(db, 'kenzActivities'), {
+            userId,
+            name,
+            phone,
+            unit,
+            activities: selectedActivities,
+            birthdate: birthdate || null,
+            createdAt: new Date()
+          });
+          successDiv.textContent = "✅ تم إرسال البيانات بنجاح!";
+          userIdBox.innerHTML = `رقمك الخاص في النظام: <span dir="ltr" style="font-family:monospace;color:#bf8c18">${userId}</span><br>الأنشطة المسجلة: <span style="color:#007bff">${selectedActivities.join(' - ')}</span>`;
+          userIdBox.style.display = 'flex';
+          saveWarning.style.display = 'inline-block';
+          pdfBtn.style.display = 'inline-block';
+          lastUserData = {
+            userId,
+            phone,
+            unit
+          };
+          form.reset();
+          updateBirthdateRequirement();
+        } catch (error) {
+          errorDiv.textContent = "❌ حدث خطأ أثناء إرسال البيانات. حاول مرة أخرى.";
+        }
+      });
+
+      updateBirthdateRequirement();
+
+      pdfBtn.addEventListener('click', () => {
+        if (!lastUserData) return;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({
+          orientation: "p",
+          unit: "mm",
+          format: "a4"
+        });
+        doc.setFont("Helvetica", "bold");
+        doc.setFontSize(20);
+        doc.text("Kenz Activities Registration Data", 105, 22, { align: "center" });
+        doc.setFontSize(14);
+        doc.text([
+          `User ID: ${lastUserData.userId}`,
+          `Phone Number: ${lastUserData.phone}`,
+          `Unit Number: ${lastUserData.unit}`
+        ], 20, 50);
+        doc.setFontSize(13);
+        doc.setTextColor(220, 50, 47);
+        doc.text("Keep this information safe. You will need it for any activity registration!", 105, 120, { align: "center" });
+        doc.save(`Kenz-User-Data-${lastUserData.userId}.pdf`);
+      });
+    });
+  </script>
+</body>
+</html>
